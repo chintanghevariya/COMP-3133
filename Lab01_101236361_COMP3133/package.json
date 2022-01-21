@@ -1,0 +1,16 @@
+{
+  "name": "WK2",
+  "version": "1.0.0",
+  "description": "file system, stream and pipe exercise",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "chintan",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0"
+  }
+}
