@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registration page</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="jumbotron text-center">
+        <h2>Registration here..</h2>
+    </div>
+    <div class="col-sm-4"></div>
+
+    <div class="col-sm-4">
+
+    <form method='POST' onsubmit='handlesubmit(event)'>
+        <h3>Username</h3>
+        <input type="text" name="username" id="username" placeholder="Username">
+       
+        <h3>firstname</h3>
+        <input type="text" name="firstname" id="firstname" placeholder="firstName">
+        
+        <h3>lastname</h3>
+        <input type="text" name="lastname" id="lastname" placeholder="lastName">
+        
+        <h3>password</h3>
+        <input type="password" name="password" id="password" placeholder="password">
+        <br/><br/>
+        <Button class="btn mt-3 btn-secondary" type='submit'>Register</Button>
+    </form>
+</div> 
+    <script>
+        function handlesubmit(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const firstname = document.getElementById('firstname').value;
+                const lastname = document.getElementById('lastname').value;
+                const password = document.getElementById('password').value;
+                fetch(
+                    "http://localhost:8000/register", {
+                    method: "POST",
+                    cache: 'no-cache',
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        username,
+                        firstname,
+                        lastname,
+                        password
+                    })
+                }
+                )
+                .then(res => res.json())
+                .then(res => {
+                    localStorage.setItem("username", JSON.stringify(res.user.username))
+                    window.location.href = "http://localhost:8000/login"
+
+                })
+                .catch(err => console.error)
+                }
+    </script>
+
+</body>
+
+</html>
