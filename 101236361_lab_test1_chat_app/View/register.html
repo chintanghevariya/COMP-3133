@@ -17,7 +17,7 @@
 
     <div class="col-sm-4">
 
-    <form method='POST' onsubmit='handlesubmit(event)'>
+    <form method='POST' onsubmit='handlesubmit(event)' action='http://localhost:8000/chat'>
         <h3>Username</h3>
         <input type="text" name="username" id="username" placeholder="Username">
        
@@ -55,12 +55,19 @@
                 )
                 .then(res => res.json())
                 .then(res => {
-                    localStorage.setItem("username", JSON.stringify(res.user.username))
-                    window.location.href = "http://localhost:8000/login"
-
+                    console.log(res)
+                    if(res.error){
+                        alert(res.error)
+                    }
+                    else if(res.newUser !== null && res.newUser !== undefined) {
+                        localStorage.setItem("username", JSON.stringify(res.newUser.username))
+                        window.location.href = "http://localhost:8000/chat"
+                    }
+                    // window.location.href = "http://localhost:8000/"
+                    
                 })
-                .catch(err => console.error)
-                }
+                .catch(err => alert(err))
+            }
     </script>
 
 </body>

@@ -63,23 +63,23 @@ app.post('/chat', async(req, res) => {
 app.post('/register', async (req, res) => {
     const {username,firstname,lastname,password} = req.body
     const usernameExist = await User.findOne({ username})
-    if (usernameExist) {
-        res.json({ message: 'Username already is use' })
-    } else {
-        try{
-        const newUser = new User({
-            username,
-            firstname,
-            lastname,
-            password
-        })
-        await newUser.save();
-            res.status(200).send({ newUser })
-    }
+    if (usernameExist !== null) {
+        throw new Error ('Username already is use' )
+    } 
+    try{
+    const newUser = new User({
+        username,
+        firstname,
+        lastname,
+        password
+    })
+    await newUser.save();
+        res.status(200).send( {newUser} )
+}
     catch(e){
-        res.status(400).send(e.message);
+        res.status(400).send({error:e.message});
     }
-    }
+    
 })
 
 // getting group msg history
@@ -145,28 +145,6 @@ io.on('connection', (socket) => {
         socket.broadcast.to(data.room).emit('newMessage', message)
     })
 
-    // private messgage
-    socket.on('sendPrivate', async (data) => {
-        const message = {
-            from_user: data.fromUser,
-            message: data.message, 
-            to_user : data.toUser
-        }
-        console.log(`${data.fromUser} send a message to ${data.toUser}`)
-        // try{
-        //     const newMsg = personalChat({
-        //         from_user: data.username,
-        //         room: data.room,
-        //         messages:data.message
-        //     })
-        //     await newMsg.save()
-        // }   
-        // catch(e){
-        //     throw new Error(e.message)
-        // }
-        console.log(io.sockets.adapter.rooms);
-        socket.broadcast.to(data.room).emit('newMessage', message)
-    })
 
     // disconnect
     socket.on('disconnect', () => {

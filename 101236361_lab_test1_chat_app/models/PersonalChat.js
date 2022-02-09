@@ -1,30 +1,37 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const PersonalChatSchema = new mongoose.Schema({
-    from_user:{
+
+const PersonalSchema = new mongoose.Schema({
+    username : {
         type: String,
         required: [true, "Username can't be empty"],
-        lowercase: true,
-        trim:true
-    },
-
-    to_user : {
-        type: String,
-        required: [true, "to user can't be empty'"],
-        trim:true,
+        trim: true,
         lowercase: true
     },
-
-    messages: {
+    firstname:{
         type: String,
-        required: [true,"msg can't be empty"],
+        required: [true, "Firstname can't be empty"],
+        lowercase: true,
         trim: true
     },
-    date_sent:{
+    lastname:{
+        type: String,
+        required: [true, "Lastname can't be empty"],
+        lowercase: true,
+        trim: true
+    },
+    password:{
+        type: String,
+        required: [true, "Password can't be empty"],
+        lowercase: true,
+        trim: true
+    },
+    created:{
         type: Date,
-        default: Date.now
+        default: Date.now,
+        alias : 'creatOn'
     }
 })
 
-const PersonalChat = mongoose.model("personalChat", PersonalChatSchema);
+const PersonalChat = mongoose.model('PersonalChat',PersonalSchema);
 module.exports = PersonalChat;
