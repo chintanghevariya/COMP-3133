@@ -9,6 +9,7 @@ const PORT = 8000
 
 const User = require('./models/User.js')
 const GroupChat = require('./models/GroupChat.js')
+const PersonalChat = require('./models/PersonalChat.js')
 
 const io = require('socket.io')(http)
 
@@ -44,6 +45,21 @@ app.get('/register', (req, res) => {
     res.sendFile(__dirname + '/View/register.html')
 })
 
+app.post('/chat', async(req, res) => {
+    
+    try{
+        const users =await User.find({})
+        res.status(200).send(
+        users
+    )
+    }
+    catch (e) {
+        res.status(400).send({
+            error: e.message
+        })
+    }
+})
+
 app.post('/register', async (req, res) => {
     const {username,firstname,lastname,password} = req.body
     const usernameExist = await User.findOne({ username})
@@ -66,7 +82,20 @@ app.post('/register', async (req, res) => {
     }
 })
 
+// getting group msg history
+app.post('/chathistory', async (req, res) => {
+    try{
+        const {roomName} = req.body
+        const chatHistory = await GroupChat.find({ room:roomName })
+            res.status(200).send( chatHistory )
+    }
+    catch(e){
+        res.status(400).send(e.message);
+    }
+})
 
+
+// getting chat.html
 app.get('/chat', (req, res) => {
     res.sendFile(__dirname + '/View/chat.html')
 })
@@ -112,6 +141,29 @@ io.on('connection', (socket) => {
         catch(e){
             throw new Error(e.message)
         }
+        console.log(io.sockets.adapter.rooms);
+        socket.broadcast.to(data.room).emit('newMessage', message)
+    })
+
+    // private messgage
+    socket.on('sendPrivate', async (data) => {
+        const message = {
+            from_user: data.fromUser,
+            message: data.message, 
+            to_user : data.toUser
+        }
+        console.log(`${data.fromUser} send a message to ${data.toUser}`)
+        // try{
+        //     const newMsg = personalChat({
+        //         from_user: data.username,
+        //         room: data.room,
+        //         messages:data.message
+        //     })
+        //     await newMsg.save()
+        // }   
+        // catch(e){
+        //     throw new Error(e.message)
+        // }
         console.log(io.sockets.adapter.rooms);
         socket.broadcast.to(data.room).emit('newMessage', message)
     })

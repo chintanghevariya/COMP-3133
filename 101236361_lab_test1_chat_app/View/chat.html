@@ -39,8 +39,22 @@
     <div id="message-container">Messages</div>
     </div>
     <br>
-    <div class="classContainer">Personal Chat</div>
+    <div class="jumbotron text-center"><h2>History Chat</h2>
+        <div class="wrapper classContainer">
+           <p id="history-container"></p>
+        </div>
     </div>
+    <div class="jumbotron text-center"><h2>Personal Chat</h2>
+        <div class="wrapper classContainer">
+            <label for="rooms">Choose a User:</label>
+            <select  id="users">
+                <option value=''>Select a user</option>
+            </select><br/>
+            <input id='privateMessage' type='text' name='roomMessage' value="" placeholder="Enter message to room">
+            <button class="btn mt-3 btn-success" onClick='sendPrivate()'>Send Private message</button>
+        </div>
+    </div>
+    
 </div>
 </body>
 
@@ -83,11 +97,50 @@
         addMessage(adminMsg)
     })
 
+    fetch(
+            "http://localhost:8000/chat", {
+            method: "POST",
+            cache: 'no-cache',
+            headers: {"Content-Type": "application/json"},
+                
+            }
+            )
+            .then(res => res.json())
+            .then(res => {
+                var array = [res]
+                array.map((e) =>{
+                    for (x=0; x < e.length; x++){
+                        var data = document.getElementById("users");
+                        var dataOptions = document.createElement("option");
+                        dataOptions.text = e[x].username;
+                        dataOptions.value = e[x].username;
+                        data.add(dataOptions);
+                    }
+                })
+            })
+            .catch(err => console.error)
+
+
+    // send private messages to users
+    function sendPrivate(){
+        let privateMsg = document.getElementById('users')
+        let toUser = privateMsg.options[privateMsg.selectedIndex].value
+        let message = document.getElementById('privateMessage').value
+            //alert(toUser)
+        const fromUser = localStorage.getItem('username');
+        const msg = {
+            messages: message,
+            from_user : fromUser,
+            to_user : toUser
+        }
+        client.emit('sendPrivate', msg)
+        addMessage(msg)
+    }
+    
     // send message to room
     function sendMessage() {
         const message = document.getElementById('roomMessage').value
         var roomName = document.getElementById('roomName').innerHTML
-        debugger
         const userName = localStorage.getItem('username')
         const messageSend = {
             room: roomName,
@@ -109,8 +162,29 @@
             let roomName = roomNameTag.options[roomNameTag.selectedIndex].value
             roomNameHeader.innerHTML = roomName
             const username = localStorage.getItem('username') || "test"
-            client.emit('join', roomName, username)   
-    }
+            client.emit('join', roomName, username)  
+            fetch(
+                "http://localhost:8000/chathistory", {
+                method: "POST",
+                cache: 'no-cache',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    roomName
+                })
+            }
+            )
+                .then(res => res.json())
+                .then(res => {
+                    const temp = res
+                    console.log(temp)
+                    for(x = 0; x < temp.length; x++){
+                        document.getElementById("history-container").innerHTML +=
+                            temp[x].from_user + " : " + temp[x].messages + '<br/>'
+                    }  
+                })
+                .catch(err => console.error)
+     } 
+    
 
     function leaveRoom() {
         var roomName = document.getElementById('roomName').innerHTML
