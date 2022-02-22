@@ -1,0 +1,29 @@
+{
+  "name": "101236361_comp3133_assig1",
+  "version": "1.0.0",
+  "description": "Fullstack developmen-II Assignment-1",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Chintan Ghevariya",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.23.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.5.0",
+    "mongodb": "^3.6.6",
+    "mongoose-unique-validator": "^2.0.3",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12",
+    "mongoose-type-email": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
