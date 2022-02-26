@@ -1,5 +1,6 @@
 const {gql} = require('apollo-server-express');
 
+
 exports.typeDefs = gql `
     type Listing {
         listing_id: String!
@@ -34,18 +35,19 @@ exports.typeDefs = gql `
         getListingByCity(city: String!): [Listing]
         getBooking: [Booking]
         getUser: [User]
+        getListingByAdmin: [User]
     }
 
     type Mutation {
-        addListing(listing_id: String!
+        addListing(userId: String!
+            listing_id: String!
             listing_title: String!
             description: String!
             street: String!
             city: String!
             postal_code: String!
             price: Float!
-            email: String!
-            username: String!) : Listing
+            ) : Listing
 
         addBooking(booking_id: String!
             listing_id: String!
@@ -55,11 +57,15 @@ exports.typeDefs = gql `
             booking_end: String!
             username: String!): Booking
 
+        login(username: String!
+            password: String!): ID
+
         addUser(username: String!
             firstName: String!
             lastName: String!
             password: String!
             email: String!
-            type: String!): User
+            type: String!): User!
+
     }
 `   

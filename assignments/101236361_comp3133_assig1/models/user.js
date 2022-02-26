@@ -45,10 +45,10 @@ const userSchema = new mongoose.Schema({
 
     type: {
         type: String,
-        default: "customer"
+        required: [true,'Please enter a valid type,(Customer / Admin)'],
+        enum: ['customer', 'admin']
     }
 });
 
-const User = mongoose.model("User", userSchema);
-
+const User = mongoose.model("User", userSchema); 
 module.exports = User;

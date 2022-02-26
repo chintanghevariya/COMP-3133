@@ -28,7 +28,13 @@ connect.then((db) => {
 
 const server = new ApolloServer({
       typeDefs: TypeDefs.typeDefs,
-      resolvers: Resolvers.resolvers
+      resolvers: Resolvers.resolvers,
+      // context:({req})=>{
+      //       // const token = req.headers.authorization || '';
+      //       // const user = getUser(token);
+      //       if(!user){throw new AuthenticationError("You must be logged in")}
+      //       return {user};
+      // }
 });
 
 
