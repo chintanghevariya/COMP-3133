@@ -23,7 +23,7 @@ exports.resolvers = {
             if (getUser.type != 'admin') {
                 return
             }
-            return await Listing.find({ username: getUser.username })
+            return await Listing.find({})
         },
 
         getListingByCity: async (parent,args) => {

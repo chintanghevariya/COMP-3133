@@ -35,7 +35,7 @@ exports.typeDefs = gql `
         getListingByCity(city: String!): [Listing]
         getBooking: [Booking]
         getUser: [User]
-        getListingByAdmin: [User]
+        getListingByAdmin: [Listing]
     }
 
     type Mutation {
