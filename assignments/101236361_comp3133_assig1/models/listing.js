@@ -48,7 +48,6 @@ const listingSchema = new mongoose.Schema({
         required: true,
         lowercase: true,
         trim: true,
-        unique: true,
         validate: [validationEmail, 'Please fill a valid email address'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
@@ -57,6 +56,10 @@ const listingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
 
 });
 
